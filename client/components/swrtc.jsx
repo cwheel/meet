@@ -20,6 +20,7 @@ class SwRTC extends React.Component {
         super(props);
 
         this.dispatch = this.props.dispatch;
+        this.curSpeaker = '';
 
         if (!window.SimpleWebRTC) throw new Error('SimpleWebRTC is not loaded!');
     }
@@ -27,9 +28,6 @@ class SwRTC extends React.Component {
     componentWillReceiveProps(nextProps) {
         // Make sure we never bound before
         if (!this.props.socket && nextProps.socket) {
-            // Bind on the event
-            let curSpeaker = '';
-
             nextProps.socket.on('speakerChanged', (speaker) => {
                 // Make sure the speaker isn't us
                 if (speaker.peerId != window.swrtcCall.connection.getSessionid()) {
@@ -44,9 +42,9 @@ class SwRTC extends React.Component {
                         }
                     }
 
-                    if (speaker.peerId != curSpeaker) {
+                    if (speaker.peerId != this.curSpeaker) {
                         attachmediastream(speakerStream, document.getElementById('speakerVideo'), { muted: true });
-                        curSpeaker = speaker.peerId;
+                        this.curSpeaker = speaker.peerId;
                     }
                 }
             });
@@ -60,15 +58,8 @@ class SwRTC extends React.Component {
         // Configure new call
         window.swrtcCall = new SimpleWebRTC({
             localVideoEl: 'localVideo',
-            remoteVideosEl: 'remoteVideos',
             autoRequestMedia: true,
             nick: this.props.nick
-        });
-
-        // Join room when the call object is ready
-        window.swrtcCall.on('readyToCall', () => {
-            window.swrtcCall.joinRoom(this.props.room);
-            dispatch(connectMeta());
         });
 
         window.swrtcCall.on('videoAdded', (video, peer) => {
@@ -78,6 +69,45 @@ class SwRTC extends React.Component {
 
                 dispatch(conferenceStarted());
             }
+
+            let remotes = document.getElementById('remoteVideos');
+            if (remotes) {
+                let container = document.createElement('div');
+                container.className = 'videoContainer';
+                container.id = 'container_' + window.swrtcCall.getDomId(peer);
+
+
+                let nickname = document.createElement('span');
+                nickname.textContent = peer.nick;
+                nickname.className = 'videoNickname';
+
+                container.appendChild(nickname);
+                container.appendChild(video);
+
+                // suppress contextmenu
+                video.oncontextmenu = function () { return false; };
+
+                remotes.appendChild(container);
+            }
+        });
+
+        window.swrtcCall.on('videoRemoved', (video, peer) => {
+            let remotes = document.getElementById('remoteVideos');
+            let el = document.getElementById(peer ? 'container_' + window.swrtcCall.getDomId(peer) : 'localScreenContainer');
+
+            if (remotes && el) {
+                remotes.removeChild(el);
+            }
+
+            if (this.curSpeaker == peer.id) {
+                attachmediastream(window.swrtcCall.getPeers()[0].stream, document.getElementById('speakerVideo'), { muted: true });
+            }
+        });
+
+        // Join room when the call object is ready
+        window.swrtcCall.on('readyToCall', () => {
+            window.swrtcCall.joinRoom(this.props.room);
+            dispatch(connectMeta());
         });
 
         // Watch the stream for speaking stop/start events

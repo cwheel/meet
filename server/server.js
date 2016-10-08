@@ -39,7 +39,7 @@ app.use(compression());
 app.use('/', express.static(path.resolve(__dirname, '../dist')));
 
 app.get('*', (req, res) => {
-    res.redirect('/');
+    res.redirect(`/#${req.path}`);
 });
 
 server.listen(3000);

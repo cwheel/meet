@@ -76,3 +76,21 @@
 .bars-selected {
     color: #009bea !important;
 }
+
+.leaveCall {
+    padding: 5px 15px;
+    border: 1px solid;
+    border-radius: 100px;
+    margin-bottom: 6px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+
+    transition: all 0.2s;
+    cursor: pointer;
+
+    &:hover {
+        background: #009bea;
+        border: solid 1px #009bea;
+        color: white;
+    }
+}

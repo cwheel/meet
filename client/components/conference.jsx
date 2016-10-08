@@ -3,6 +3,8 @@ import React from 'react';
 import SwRTC from './swrtc';
 
 import { connect } from 'react-redux';
+import { push } from 'react-router-redux';
+
 import { vidCapture, micCapture } from '../actions/camera';
 import { showSidebar } from '../actions/conference';
 
@@ -24,8 +26,7 @@ class Conference extends React.Component {
         this.mute = this.mute.bind(this);
         this.pause = this.pause.bind(this);
         this.sidebar = this.sidebar.bind(this);
-
-        console.log('herree')
+        this.leave = this.leave.bind(this);
     }
 
     render() {
@@ -35,6 +36,7 @@ class Conference extends React.Component {
                     <i className={ this.props.sidebarVisible ? 'fa fa-bars bars-selected' : 'fa fa-bars' } aria-hidden='true' onClick={ this.sidebar }></i>
                     <div className='title'>Meet</div>
                     <div className='tools'>
+                        <div className='leaveCall' onClick={ this.leave }>Leave Call</div>
                         <i className={this.props.mic ? "fa fa-microphone-slash" : "fa fa-microphone"} aria-hidden="true" onClick={ this.mute }></i>
                         <i className="fa fa-video-camera" aria-hidden="true" onClick={ this.pause }></i>
                         <i className="fa fa-user-plus" aria-hidden="true"></i>
@@ -58,6 +60,10 @@ class Conference extends React.Component {
 
     sidebar() {
         this.dispatch(showSidebar(!this.props.sidebarVisible));
+    }
+
+    leave() {
+        this.dispatch(push('/'));
     }
 }
 

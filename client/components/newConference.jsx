@@ -18,6 +18,7 @@ class NewConference extends React.Component {
         this.dispatch = this.props.dispatch;
         this.start = this.start.bind(this);
         this.onChange = this.onChange.bind(this);
+        this.enterKey = this.enterKey.bind(this);
     }
 
     componentDidMount() {
@@ -31,13 +32,17 @@ class NewConference extends React.Component {
         this.dispatch(newConferenceName(e.target.value));
     }
 
+    enterKey(e) {
+        if (e.key == 'Enter') this.start()
+    }
+
     render() {
         return (
 			<div className='centeredContainer'>
                 <div className='appTitle'>meet</div>
                 <div className='appSubTitle'>intelligent video conferencing</div>
 
-                <input type='text' className='nameInput' onChange={ this.onChange } placeholder='Your Name'/>
+                <input type='text' className='nameInput' onChange={ this.onChange } placeholder='Your Name' onKeyDown={ this.enterKey }/>
                 <div className='startButton' onClick={ this.start }>Start Talking</div>
             </div>
 		);
