@@ -1,0 +1,38 @@
+#localVideo {
+    position: absolute;
+    bottom: 20px;
+    right: 24px;
+    height: 200px;
+    width: 267px;
+    box-shadow: 6px 7px 25px -6px rgba(0,0,0,0.75);
+    border: 1px solid white;
+
+    video {
+        width: 100%;
+        height: 100%;
+    }
+}
+
+#remoteVideos {
+    display: flex;
+    flex-direction: column;
+
+    video {
+        margin: 10px 20px;
+
+        height: 113px;
+        width: 150px;
+        box-shadow: 6px 7px 25px -6px rgba(0,0,0,.55);
+        border: 1px solid white;
+    }
+}
+
+#speakerVideo {
+    background: lighten(black, 20);
+    z-index: -1;
+
+    width: 100%;
+    height: 100%;
+
+    position: absolute;
+}
