@@ -7,6 +7,8 @@
     box-shadow: 6px 7px 25px -6px rgba(0,0,0,0.75);
     border: 1px solid white;
 
+    z-index: 2;
+
     video {
         width: 100%;
         height: 100%;
@@ -16,20 +18,27 @@
 #remoteVideos {
     display: flex;
     flex-direction: column;
+    align-items: center;
 
     video {
         margin: 10px 20px;
 
-        height: 113px;
-        width: 150px;
+        height: 138px;
+        width: 184px;
         box-shadow: 6px 7px 25px -6px rgba(0,0,0,.55);
-        border: 1px solid white;
+        border: 1px solid #fff;
+
+        transition: all 0.2s;
+
+        &:hover {
+            transform: scale(1.2, 1.2);
+        }
     }
 }
 
 #speakerVideo {
-    background: lighten(black, 20);
-    z-index: -1;
+    background: #eaeaea;
+    z-index: 1;
 
     width: 100%;
     height: 100%;

@@ -58,11 +58,21 @@
 }
 
 .waitingMessage {
-    color: white;
+    color: lighten(black, 15);
 
     font-family: 'Montserrat', sans-serif;
     font-size: 20px;
 
     text-align: center;
     margin-top: 25%;
+
+    z-index: 4 !important;
+
+    text-align: center;
+    width: 100%;
+    position: absolute;
+}
+
+.bars-selected {
+    color: #009bea !important;
 }

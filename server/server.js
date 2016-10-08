@@ -25,7 +25,6 @@ io.on('connection', (socket) => {
     });
 
     socket.on('speechEvent', (event) => {
-        console.log(event)
         io.sockets.in(event.room).emit('speakerChanged', event);
     });
 });
@@ -38,5 +37,9 @@ app.use(bodyParser.urlencoded({
 app.use(compression());
 
 app.use('/', express.static(path.resolve(__dirname, '../dist')));
+
+app.get('*', (req, res) => {
+    res.redirect('/');
+});
 
 server.listen(3000);

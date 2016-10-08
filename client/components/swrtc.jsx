@@ -5,12 +5,14 @@ import attachmediastream from 'attachmediastream';
 import SpeechToText from './speechToText';
 
 import { connect as connectMeta, speechEvent } from '../actions/metaChannel';
+import { conferenceStarted } from '../actions/conference';
 
 function mapStateToProps(state) {
     return {
         socket: state.metaChannel.get('socket'),
         vid: state.camera.get('video'),
         mic: state.camera.get('microphone'),
+        conferenceStarted: state.conference.get('conferenceStarted')
     };
 }
 
@@ -31,7 +33,7 @@ class SwRTC extends React.Component {
             nextProps.socket.on('speakerChanged', (speaker) => {
                 // Make sure the speaker isn't us
                 if (speaker.peerId != window.swrtcCall.connection.getSessionid()) {
-                    console.log('remote speaker', speaker)
+                    console.log('remote speaker', speaker);
 
                     let peers = swrtcCall.getPeers();
                     let speakerStream = 0;
@@ -53,18 +55,29 @@ class SwRTC extends React.Component {
 
     componentDidMount() {
         let dispatch = this.dispatch;
+        let hasBeenAttatched = false;
 
         // Configure new call
         window.swrtcCall = new SimpleWebRTC({
-          localVideoEl: 'localVideo',
-          remoteVideosEl: 'remoteVideos',
-          autoRequestMedia: true
+            localVideoEl: 'localVideo',
+            remoteVideosEl: 'remoteVideos',
+            autoRequestMedia: true,
+            nick: this.props.nick
         });
 
         // Join room when the call object is ready
         window.swrtcCall.on('readyToCall', () => {
-            window.swrtcCall.joinRoom('562i8dfhfe3fu39f4');
+            window.swrtcCall.joinRoom(this.props.room);
             dispatch(connectMeta());
+        });
+
+        window.swrtcCall.on('videoAdded', (video, peer) => {
+            if (!hasBeenAttatched) {
+                attachmediastream(peer.stream, document.getElementById('speakerVideo'), { muted: true });
+                hasBeenAttatched = true;
+
+                dispatch(conferenceStarted());
+            }
         });
 
         // Watch the stream for speaking stop/start events
@@ -96,6 +109,7 @@ class SwRTC extends React.Component {
 
                 <SpeechToText />
                 <div id='remoteVideos'></div>
+                {!this.props.conferenceStarted ? <div className='waitingMessage'>Hang tight, we're waiting for others to join.</div> : null}
             </div>
 		);
     }

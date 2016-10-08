@@ -45,6 +45,7 @@
     "immutable": "^3.8.1",
     "moment": "^2.13.0",
     "postmark": "^1.2.1",
+    "randomstring": "^1.1.5",
     "react": "latest",
     "react-addons-shallow-compare": "^15.1.0",
     "react-dimensions": "^1.2.0",
@@ -59,7 +60,7 @@
     "redux-thunk": "^2.0.1",
     "socket.io": "^1.5.0",
     "vinyl-source-stream": "^1.1.0",
-    "watson-developer-cloud": "^2.4.6",
-    "watson-html5-speech-recognition": "^0.6.6"
+    "watson-html5-speech-recognition": "^0.6.6",
+    "watson-developer-cloud": "^2.4.6"
   }
 }
