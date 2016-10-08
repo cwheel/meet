@@ -37,6 +37,7 @@
     "gulp-concat": "latest",
     "gulp-cssnano": "latest",
     "gulp-develop-server": "^0.5.2",
+    "gulp-htmlmin": "^3.0.0",
     "gulp-sass": "latest",
     "gulp-sourcemaps": "latest",
     "gulp-webpack": "^1.5.0",
@@ -52,11 +53,13 @@
     "react-router": "^2.3.0",
     "react-router-redux": "^4.0.2",
     "react-router-transition": "0.0.5",
+    "react-speech": "^0.3.1",
+    "react-speech-recognition-input": "^0.1.0",
     "redux": "^3.5.1",
     "redux-thunk": "^2.0.1",
-    "vinyl-source-stream": "^1.1.0",
-    "watson-developer-cloud": "^2.4.6"
     "socket.io": "^1.5.0",
-    "vinyl-source-stream": "^1.1.0"
+    "vinyl-source-stream": "^1.1.0",
+    "watson-developer-cloud": "^2.4.6",
+    "watson-html5-speech-recognition": "^0.6.6"
   }
 }
