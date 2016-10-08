@@ -52,6 +52,7 @@
     "react-router-transition": "0.0.5",
     "redux": "^3.5.1",
     "redux-thunk": "^2.0.1",
-    "vinyl-source-stream": "^1.1.0"
+    "vinyl-source-stream": "^1.1.0",
+    "watson-developer-cloud": "^2.4.6"
   }
 }
