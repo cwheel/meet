@@ -24,6 +24,8 @@ class Conference extends React.Component {
         this.mute = this.mute.bind(this);
         this.pause = this.pause.bind(this);
         this.sidebar = this.sidebar.bind(this);
+
+        console.log('herree')
     }
 
     render() {
@@ -39,7 +41,7 @@ class Conference extends React.Component {
                     </div>
                 </div>
 
-                <SwRTC />
+                <SwRTC room={ this.props.params.room } nick={ this.props.params.nick } />
 
                 <Sidebar />
             </div>

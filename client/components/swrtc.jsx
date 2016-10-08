@@ -59,14 +59,15 @@ class SwRTC extends React.Component {
 
         // Configure new call
         window.swrtcCall = new SimpleWebRTC({
-          localVideoEl: 'localVideo',
-          remoteVideosEl: 'remoteVideos',
-          autoRequestMedia: true
+            localVideoEl: 'localVideo',
+            remoteVideosEl: 'remoteVideos',
+            autoRequestMedia: true,
+            nick: this.props.nick
         });
 
         // Join room when the call object is ready
         window.swrtcCall.on('readyToCall', () => {
-            window.swrtcCall.joinRoom('562i8dfhfe3fu39f4');
+            window.swrtcCall.joinRoom(this.props.room);
             dispatch(connectMeta());
         });
 

@@ -1,4 +1,4 @@
-import { SHOW_SIDEBAR, SELECT_SIDEBAR_COMPONENT, CONFERENCE_STARTED } from './actionTypes';
+import { SHOW_SIDEBAR, SELECT_SIDEBAR_COMPONENT, CONFERENCE_STARTED, NEW_CONFERENCE_NAME } from './actionTypes';
 
 export function showSidebar(visible) {
     return {
@@ -17,5 +17,12 @@ export function selectSidebarComponent(component) {
 export function conferenceStarted() {
     return {
         type: CONFERENCE_STARTED
+    }
+}
+
+export function newConferenceName(name) {
+    return {
+        type: NEW_CONFERENCE_NAME,
+        name
     }
 }
