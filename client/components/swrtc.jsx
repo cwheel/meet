@@ -31,7 +31,7 @@ class SwRTC extends React.Component {
             nextProps.socket.on('speakerChanged', (speaker) => {
                 // Make sure the speaker isn't us
                 if (speaker.peerId != window.swrtcCall.connection.getSessionid()) {
-                    console.log('remote speaker', speaker)
+                    console.log('remote speaker', speaker);
 
                     let peers = swrtcCall.getPeers();
                     let speakerStream = 0;
@@ -53,6 +53,7 @@ class SwRTC extends React.Component {
 
     componentDidMount() {
         let dispatch = this.dispatch;
+        let hasBeenAttatched = false;
 
         // Configure new call
         window.swrtcCall = new SimpleWebRTC({
@@ -65,6 +66,13 @@ class SwRTC extends React.Component {
         window.swrtcCall.on('readyToCall', () => {
             window.swrtcCall.joinRoom('562i8dfhfe3fu39f4');
             dispatch(connectMeta());
+        });
+
+        window.swrtcCall.on('videoAdded', function (video, peer) {
+            if (!hasBeenAttatched) {
+                attachmediastream(peer.stream, document.getElementById('speakerVideo'), { muted: true });
+                hasBeenAttatched = true;
+            }
         });
 
         // Watch the stream for speaking stop/start events
@@ -91,8 +99,6 @@ class SwRTC extends React.Component {
                         <i className="fa fa-microphone-slash" aria-hidden="true"></i>
                     </div>
                 </div>
-
-                <div id='remoteVideos'></div>
             </div>
 		);
     }

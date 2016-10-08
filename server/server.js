@@ -25,7 +25,6 @@ io.on('connection', (socket) => {
     });
 
     socket.on('speechEvent', (event) => {
-        console.log(event)
         io.sockets.in(event.room).emit('speakerChanged', event);
     });
 });

@@ -4,11 +4,15 @@ import SwRTC from './swrtc';
 
 import { connect } from 'react-redux';
 import { vidCapture, micCapture } from '../actions/camera';
+import { showSidebar } from '../actions/conference';
+
+import Sidebar from './sidebar';
 
 function mapStateToProps(state) {
     return {
         vid: state.camera.get('video'),
         mic: state.camera.get('microphone'),
+        sidebarVisible: state.conference.get('sidebarVisible')
     };
 }
 
@@ -19,13 +23,14 @@ class Conference extends React.Component {
         this.dispatch = this.props.dispatch;
         this.mute = this.mute.bind(this);
         this.pause = this.pause.bind(this);
+        this.sidebar = this.sidebar.bind(this);
     }
 
     render() {
         return (
-			<div>
+			<div className='page'>
                 <div className='topbar'>
-                    <i className='fa fa-bars' aria-hidden='true'></i>
+                    <i className={ this.props.sidebarVisible ? 'fa fa-bars bars-selected' : 'fa fa-bars' } aria-hidden='true' onClick={ this.sidebar }></i>
                     <div className='title'>Meet</div>
                     <div className='tools'>
                         <i className={this.props.mic ? "fa fa-microphone-slash" : "fa fa-microphone"} aria-hidden="true" onClick={ this.mute }></i>
@@ -35,6 +40,8 @@ class Conference extends React.Component {
                 </div>
 
                 <SwRTC />
+
+                <Sidebar />
 
                 <div className='waitingMessage'>Hang tight, we're waiting for others to join.</div>
             </div>
@@ -47,6 +54,10 @@ class Conference extends React.Component {
 
     pause() {
         this.dispatch(vidCapture(!this.props.vid));
+    }
+
+    sidebar() {
+        this.dispatch(showSidebar(!this.props.sidebarVisible));
     }
 }
 

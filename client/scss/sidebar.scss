@@ -1,0 +1,44 @@
+#sidebar {
+    height: 100%;
+    width: 300px;
+    background: white;
+    position: absolute;
+
+    transition: all 0.25s;
+    left: 0;
+
+    z-index: 3;
+}
+
+.sidebarIn {
+    left: -300px !important;
+}
+
+.sidebarHeader {
+    display: flex;
+
+    margin-bottom: 10px;
+
+    div {
+        flex: 1;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 10px;
+
+        text-align: center;
+        border-bottom: 1px solid gray;
+
+        padding: 7px;
+
+        transition: all 0.2s;
+        cursor: pointer;
+
+        &:hover {
+            background: #009bea;
+            color: white;
+        }
+    }
+
+    div:nth-child(1) {
+        border-right: 1px solid gray;
+    }
+}
