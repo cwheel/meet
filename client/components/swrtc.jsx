@@ -4,12 +4,14 @@ import hark from 'hark';
 import attachmediastream from 'attachmediastream';
 
 import { connect as connectMeta, speechEvent } from '../actions/metaChannel';
+import { conferenceStarted } from '../actions/conference';
 
 function mapStateToProps(state) {
     return {
         socket: state.metaChannel.get('socket'),
         vid: state.camera.get('video'),
         mic: state.camera.get('microphone'),
+        conferenceStarted: state.conference.get('conferenceStarted')
     };
 }
 
@@ -68,10 +70,12 @@ class SwRTC extends React.Component {
             dispatch(connectMeta());
         });
 
-        window.swrtcCall.on('videoAdded', function (video, peer) {
+        window.swrtcCall.on('videoAdded', (video, peer) => {
             if (!hasBeenAttatched) {
                 attachmediastream(peer.stream, document.getElementById('speakerVideo'), { muted: true });
                 hasBeenAttatched = true;
+
+                dispatch(conferenceStarted());
             }
         });
 
@@ -99,6 +103,8 @@ class SwRTC extends React.Component {
                         <i className="fa fa-microphone-slash" aria-hidden="true"></i>
                     </div>
                 </div>
+
+                {!this.props.conferenceStarted ? <div className='waitingMessage'>Hang tight, we're waiting for others to join.</div> : null}
             </div>
 		);
     }

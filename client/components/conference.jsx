@@ -42,8 +42,6 @@ class Conference extends React.Component {
                 <SwRTC />
 
                 <Sidebar />
-
-                <div className='waitingMessage'>Hang tight, we're waiting for others to join.</div>
             </div>
 		);
     }

@@ -42,3 +42,18 @@
         border-right: 1px solid gray;
     }
 }
+
+.selectedHeader {
+    background: lighten(#009bea, 25) !important;
+    color: white !important;
+}
+
+.invisible {
+    z-index: 0;
+    opacity: 0;
+}
+
+.visible {
+    opacity: 1;
+    z-index: 10;
+}
