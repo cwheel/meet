@@ -1,19 +1,29 @@
 import React from 'react';
 
+import SwRTC from './swrtc';
+
+import { connect } from 'react-redux';
+
 class Conference extends React.Component {
     constructor(props) {
         super(props);
-
-        console.log('loaded')
 
         this.dispatch = this.props.dispatch;
     }
 
     render() {
         return (
-			<div>conference page</div>
+			<div>
+                <div className='topbar'>
+                    <i className='fa fa-bars' aria-hidden='true'></i>
+                    <div className='title'>Meet</div>
+                    <div className='tools'>tools here</div>
+                </div>
+
+                <SwRTC />
+            </div>
 		);
     }
 }
 
-export default Conference;
+export default connect()(Conference);

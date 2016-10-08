@@ -1,0 +1,37 @@
+.topbar {
+    border-bottom: 1px solid gray;
+    display: flex;
+    align-items: center;
+
+    .fa-bars {
+        margin-left: 18px;
+        font-size: 20px;
+        padding-top: -5px;
+        display: inline-block;
+        margin-bottom: 4px;
+        color: gray;
+
+        transition: all 0.2s;
+        cursor: pointer;
+
+        &:hover {
+            color: #009bea;
+        }
+    }
+
+    .title {
+        font-family: Damion, cursive;
+
+        font-size: 30px;
+        margin-top: 5px;
+        margin-bottom: 5px;
+
+        color: lighten(black, 10);
+
+        margin-left: 10px;
+    }
+
+    .tools {
+        align-items: flex-end;
+    }
+}
