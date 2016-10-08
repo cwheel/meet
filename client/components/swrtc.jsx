@@ -8,6 +8,8 @@ import { connect as connectMeta, speechEvent } from '../actions/metaChannel';
 function mapStateToProps(state) {
     return {
         socket: state.metaChannel.get('socket'),
+        vid: state.camera.get('video'),
+        mic: state.camera.get('microphone'),
     };
 }
 
@@ -83,7 +85,13 @@ class SwRTC extends React.Component {
         return (
 			<div>
                 <video id='speakerVideo'></video>
-                <div id='localVideo'></div>
+
+                <div id='localVideo'>
+                    <div className={ this.props.mic ? 'overlayHidden' : 'mutedOverlay' }>
+                        <i className="fa fa-microphone-slash" aria-hidden="true"></i>
+                    </div>
+                </div>
+
                 <div id='remoteVideos'></div>
             </div>
 		);

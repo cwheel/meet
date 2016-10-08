@@ -6,11 +6,13 @@ import thunk from 'redux-thunk';
 
 import conference from '../reducers/conference';
 import metaChannel from '../reducers/metaChannel';
+import camera from '../reducers/camera';
 
 export default function (history, initialState = {}) {
     const reducer = combineReducers({
         routing: routerReducer,
         metaChannel,
+        camera,
         conference
     });
 
