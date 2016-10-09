@@ -11,11 +11,12 @@ class SpeechToText extends React.Component {
 	    var recognizing = false;
 	    var ignore_onend;
 	    var start_timestamp;
+	    var last_timestamp;
 	    if (!window || !('webkitSpeechRecognition' in window)) {
 
 	    } else {
 	      var recognition = new webkitSpeechRecognition();
-	      recognition.continuous = true;
+	      recognition.continuous = false;
 	      recognition.interimResults = true;
 
 	      recognition.onstart = function() {
@@ -23,23 +24,15 @@ class SpeechToText extends React.Component {
 	      };
 
 	      recognition.onerror = function(event) {
-	        console.log(event)
+	        console.log(event);
 	      };
 
 	      recognition.onend = function() {
 	        recognizing = false;
-	        if (ignore_onend) {
-	          return;
-	        }
-	        if (!final_transcript) {
-	          return;
-	        }
-	        if (window.getSelection) {
-	          window.getSelection().removeAllRanges();
-	          var range = document.createRange();
-	          range.selectNode(document.getElementById('final_span'));
-	          window.getSelection().addRange(range);
-	        }
+	        //Send Data
+	        console.log("The end");
+
+ 	        startRecognition();
 	      };
 
 	      recognition.onresult = function(event) {
@@ -58,10 +51,12 @@ class SpeechToText extends React.Component {
 	        }
 	        console.log(final_transcript);
 	        console.log(interim_transcript);
+	   		last_timestamp = Date.now();
 	        if (final_transcript || interim_transcript) {
+	        	console.log("onResult");
 	        }
 	      };
-	    }
+	    
 
 	    var two_line = /\n\n/g;
 	    var one_line = /\n/g;
@@ -74,21 +69,39 @@ class SpeechToText extends React.Component {
 	      return s.replace(first_char, function(m) { return m.toUpperCase(); });
 	    }
 
-	    function startButton(event) {
-	      if (recognizing) {
-	        recognition.stop();
-	        return;
-	      }
-	      final_transcript = '';
-	      recognition.lang = 'en-US'
-	      recognition.start();
-	      ignore_onend = false;
+	    function startRecognition() {
+    		recognition.start();
+	    	recognizing = true;
 	    }
 
+	    function stopRecognition() {
+	    	recognizing = false;
+	    	recognition.stop();
+	    }
+
+	    function monitorRecognition() {
+			console.log("Happening");
+	    	if(recognizing) {
+	    		console.log(Date.now());
+	    		console.log(last_timestamp + (1000 * 5));
+	    		if (last_timestamp + (1000 * 5) < Date.now()) {
+	    			stopRecognition();
+	    			//startRecognition();
+	    			last_timestamp = NaN;
+	    			console.log("Stopped");
+	    		} 
+	    	} else {
+	    		//startRecognition();
+	    	}
+	    	setTimeout(monitorRecognition, 1000)
+	    }
+
+		startRecognition();
+		//monitorRecognition();
 	    var current_style;
-	    startButton();
 	    console.log("Test");
     }
+}
 
     render() {
         return (<div></div>);
