@@ -9,6 +9,7 @@ const https = require('https');
 const moment = require('moment');
 const postmark = require('postmark');
 const mustache = require('mustache');
+var request = require('request');
 
 const key = fs.readFileSync('keys/cert.key', 'utf8');
 const cert = fs.readFileSync('keys/cert.pem', 'utf8');
@@ -93,6 +94,7 @@ let addToKnowledge = (string, room) => {
 
 	if (wordCount > 30) {
 		// Send off the Data
+
 		roomKnowledge.currentWords = 0;
 		roomKnowledge.currentStrings[roomKnowledge.length] = currentStr;
 		roomKnowledge.length += 1;
@@ -103,6 +105,14 @@ let addToKnowledge = (string, room) => {
 		roomKnowledge.currentWords = wordCount;
 		roomKnowledge.currentStrings[roomKnowledge.length] = currentStr;
 	}
+}
+
+let knowledgeData = (knowledgeString) => {
+	request('http://www.google.com', function (error, response, body) {
+		if (!error && response.statusCode == 200) {
+			console.log(body) // Show the HTML for the Google homepage.
+		}
+	})
 }
 
 app.use(bodyParser.json());
