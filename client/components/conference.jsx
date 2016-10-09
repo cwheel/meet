@@ -7,7 +7,7 @@ import { push } from 'react-router-redux';
 import {ModalContainer, ModalDialog} from 'react-modal-dialog';
 
 import { vidCapture, micCapture } from '../actions/camera';
-import { showSidebar, showInvite, invitePhone, inviteName } from '../actions/conference';
+import { showSidebar, showInvite, inviteEmail, inviteName } from '../actions/conference';
 import { invite } from '../actions/metaChannel';
 
 import Sidebar from './sidebar';
@@ -18,7 +18,7 @@ function mapStateToProps(state) {
         mic: state.camera.get('microphone'),
         sidebarVisible: state.conference.get('sidebarVisible'),
         showInvite: state.conference.get('showInvite'),
-        invitePhone: state.conference.get('invitePhone'),
+        inviteEmail: state.conference.get('inviteEmail'),
         inviteName: state.conference.get('inviteName')
     };
 }
@@ -35,12 +35,12 @@ class Conference extends React.Component {
         this.toggleInvite = this.toggleInvite.bind(this);
         this.sendInvite = this.sendInvite.bind(this);
 
-        this.invitePhoneChanged = this.invitePhoneChanged.bind(this);
+        this.inviteEmailChanged = this.inviteEmailChanged.bind(this);
         this.inviteNameChanged = this.inviteNameChanged.bind(this);
     }
 
-    invitePhoneChanged(e) {
-        this.dispatch(invitePhone(e.target.value));
+    inviteEmailChanged(e) {
+        this.dispatch(inviteEmail(e.target.value));
     }
 
     inviteNameChanged(e) {
@@ -68,7 +68,7 @@ class Conference extends React.Component {
                         <div className='dialogTitle'>Who should we invite?</div>
 
                         <div>
-                            <input type='phone' className='dialogInput' placeholder='Phone Number' onChange={ this.invitePhoneChanged } />
+                            <input type='email' className='dialogInput' placeholder='Email Address' onChange={ this.inviteEmailChanged } />
                         </div>
 
                         <div>
@@ -88,7 +88,8 @@ class Conference extends React.Component {
     }
 
     sendInvite() {
-        this.props.dispatch(invite(this.props.invitePhone, this.props.inviteName))
+        this.props.dispatch(invite(this.props.inviteEmail, this.props.inviteName, this.props.params.nick, this.props.params.room));
+        this.toggleInvite();
     }
 
     toggleInvite() {

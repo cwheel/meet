@@ -1,4 +1,4 @@
-import { SHOW_SIDEBAR, SELECT_SIDEBAR_COMPONENT, CONFERENCE_STARTED, NEW_CONFERENCE_NAME, SHOW_INVITE, INVITE_NAME, INVITE_PHONE } from './actionTypes';
+import { SHOW_SIDEBAR, SELECT_SIDEBAR_COMPONENT, CONFERENCE_STARTED, NEW_CONFERENCE_NAME, SHOW_INVITE, INVITE_NAME, INVITE_EMAIL } from './actionTypes';
 
 export function showSidebar(visible) {
     return {
@@ -33,10 +33,10 @@ export function showInvite() {
     }
 }
 
-export function invitePhone(phone) {
+export function inviteEmail(email) {
     return {
-        type: INVITE_PHONE,
-        phone
+        type: INVITE_EMAIL,
+        email
     }
 }
 
