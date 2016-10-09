@@ -28,11 +28,13 @@ export function speechEvent(isSpeaking) {
     }
 }
 
-export function invite(phone, name) {
+export function invite(email, name, inviter, room) {
     return {
         type: META_INVITE,
-        phone,
-        name
+        email,
+        name,
+        inviter,
+        room
     }
 }
 

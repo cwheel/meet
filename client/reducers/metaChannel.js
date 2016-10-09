@@ -13,7 +13,7 @@ export default (state = Immutable.Map({ socket: null }), action) => {
             return state.set('isSpeaking', action.event.isSpeaking);
         case META_INVITE:
             if (state.get('socket')) {
-                state.get('socket').emit('invite', {phone: action.phone, name: action.name});
+                state.get('socket').emit('invite', {email: action.email, name: action.name, inviter: action.inviter, room: action.room});
             }
 
         case META_TRANSCRIBE:

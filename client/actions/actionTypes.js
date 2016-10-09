@@ -13,5 +13,5 @@ export const CONFERENCE_STARTED = 'conferenceStarted';
 export const NEW_CONFERENCE_NAME = 'newConferenceName';
 
 export const SHOW_INVITE = 'showInvite';
-export const INVITE_PHONE = 'invitePhone';
+export const INVITE_EMAIL = 'inviteEmail';
 export const INVITE_NAME = 'inviteName';

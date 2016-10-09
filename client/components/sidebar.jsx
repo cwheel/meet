@@ -30,9 +30,7 @@ class Sidebar extends React.Component {
                 </div>
 
                 <div id='remoteVideos' className={this.props.sidebarComponent == 'participants' ? 'visible' : 'invisible'}></div>
-                <div className={this.props.sidebarComponent == 'knowledge' ? 'visible' : 'invisible'}>
-                    
-                </div>
+                <div className={this.props.sidebarComponent == 'knowledge' ? 'visible' : 'invisible'}></div>
             </div>
 		);
     }
