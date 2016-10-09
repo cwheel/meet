@@ -137,7 +137,7 @@ class SwRTC extends React.Component {
                     </div>
                 </div>
 
-                <SpeechToText />
+                <SpeechToText nick={this.props.nick} />
                 <div id='remoteVideos'></div>
                 {!this.props.conferenceStarted ? <div className='waitingMessage'>Hang tight, we're waiting for others to join.</div> : null}
             </div>

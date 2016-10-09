@@ -20,6 +20,8 @@ let server = https.createServer({key, cert}, app);
 
 let io = require('socket.io')(server);
 
+let transcripts = {};
+
 io.on('connection', (socket) => {
     console.log(`[${moment().format('hh:mm:ss')}] Meta channnel client joined ${socket.conn.remoteAddress}`);
 
@@ -28,9 +30,21 @@ io.on('connection', (socket) => {
     });
 
     socket.on('speechEvent', (event) => {
+    	console.log(event);
         io.sockets.in(event.room).emit('speakerChanged', event);
     });
 
+    socket.on('transcribeEvent', (event) => {
+    	console.log(event);
+    	if (event.text != '') {
+    		if (!(event.room in transcripts)) {
+    			transcripts[event.room] = [];
+    		}
+    		transcripts[event.room].push(event);
+    		console.log(transcripts[event.room]);
+        	io.sockets.in(event.room).emit('speakerChanged', event);
+    	}
+    	
     socket.on('invite', (invite) => {
         let templ = fs.readFileSync('emails/invite.html', 'utf8');
         let link = `${process.env.APPLICATION_URL}/r/${invite.room}/${encodeURIComponent(invite.name)}`;
@@ -56,7 +70,7 @@ app.use(compression());
 app.use('/', express.static(path.resolve(__dirname, '../dist')));
 
 app.get('*', (req, res) => {
-    res.redirect(`/#${req.path}`);
+	res.redirect(`/#${req.path}`);
 });
 
 server.listen(3000);

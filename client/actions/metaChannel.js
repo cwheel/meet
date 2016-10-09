@@ -1,4 +1,4 @@
-import { META_CONNECT, META_SPEECH_EVENT, META_INVITE } from './actionTypes';
+import { META_CONNECT, META_SPEECH_EVENT, META_INVITE, META_TRANSCRIBE } from './actionTypes';
 
 export function connect() {
     return dispatch => {
@@ -35,5 +35,17 @@ export function invite(email, name, inviter, room) {
         name,
         inviter,
         room
+    }
+}
+
+export function transcribeEvent(text, nick) {
+    return {
+        type: META_TRANSCRIBE,
+        event: {
+            nick,
+            text,
+            time: Date.now(),
+            room: window.swrtcCall.roomName,
+        }
     }
 }

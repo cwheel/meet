@@ -1,5 +1,5 @@
 import Immutable from 'immutable';
-import { META_CONNECT, META_SPEECH_EVENT, META_INVITE } from '../actions/actionTypes';
+import { META_CONNECT, META_SPEECH_EVENT, META_INVITE, META_TRANSCRIBE } from '../actions/actionTypes';
 
 export default (state = Immutable.Map({ socket: null }), action) => {
     switch(action.type) {
@@ -16,7 +16,11 @@ export default (state = Immutable.Map({ socket: null }), action) => {
                 state.get('socket').emit('invite', {email: action.email, name: action.name, inviter: action.inviter, room: action.room});
             }
 
-            return state;
+        case META_TRANSCRIBE:
+            if (state.get('socket')) {
+                state.get('socket').emit('transcribeEvent', action.event);
+            }
+            
         default:
             return state;
     }

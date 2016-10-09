@@ -1,8 +1,13 @@
 import React from 'react';
+import { connect } from 'react-redux';
+
+import { connect as connectMeta, transcribeEvent } from '../actions/metaChannel';
 
 class SpeechToText extends React.Component {
     constructor(props) {
         super(props);
+		this.dispatch = this.props.dispatch.bind(this);
+		this.nick = this.props.nick;
         console.log("Test");
     }
 
@@ -12,6 +17,8 @@ class SpeechToText extends React.Component {
 	    var ignore_onend;
 	    var start_timestamp;
 	    var last_timestamp;
+	    var SpeechToText = this;
+	    console.log(SpeechToText);
 	    if (!window || !('webkitSpeechRecognition' in window)) {
 
 	    } else {
@@ -30,7 +37,10 @@ class SpeechToText extends React.Component {
 	      recognition.onend = function() {
 	        recognizing = false;
 	        //Send Data
+	        SpeechToText.dispatch(transcribeEvent(final_transcript, SpeechToText.nick));
+	        final_transcript = "";
 	        console.log("The end");
+
 
  	        startRecognition();
 	      };
@@ -108,4 +118,4 @@ class SpeechToText extends React.Component {
     }
 }
 
-export default SpeechToText;
+export default connect()(SpeechToText);

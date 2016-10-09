@@ -1,6 +1,7 @@
 export const META_CONNECT = 'metaConnect';
 export const META_SPEECH_EVENT = 'metaSpeechEvent';
 export const META_INVITE = 'metaInvite';
+export const META_TRANSCRIBE = 'metaTranscribe';
 
 export const MIC_CAPTURE = 'micCapture';
 export const VID_CAPTURE = 'vidCapture';
