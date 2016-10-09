@@ -12,19 +12,25 @@
     font-family: sans-serif;
     font-weight: 400;
     text-align: center;
-">Hooray {{invitee}}! You've got a meeting.</div>
+">Hi {{name}}, you've completed a meeting!</div>
         <div style="
     font-family: sans-serif;
     font-weight: 100;
     text-align: center;
     margin: 10;
-">Don't like meetings? Don't worry, meetings in meet are a breeze.</div>
+">We took some notes during your meeting, and we've listed them below. If you're running low on time, fear not for a summary awaits you!</div>
 
         <div style="
     font-family: sans-serif;
     text-align: center;
     margin-top: 30px;
-">You can meet up with {{inviter}} by going <a href="{{link}}" style="color:#009bea; a:visited {color: #009bea}; a:hover {color: #009bea};">here</a>.</div>
+"><b>TL;DR</b> {{{summary}}}</div>
+
+<div style="
+font-family: sans-serif;
+text-align: center;
+margin-top: 30px;
+">{{{results}}}</div>
 
         <div style="
     margin-top: 80px;
@@ -36,6 +42,7 @@
     font-weight: 100;
     text-align: center;
 ">- Meet Team</div>
+
 
 
 </body></html>

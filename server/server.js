@@ -10,6 +10,8 @@ const moment = require('moment');
 const postmark = require('postmark');
 const mustache = require('mustache');
 var request = require('request');
+const SummaryTool = require('node-summary');
+const btoa = require('btoa');
 
 const key = fs.readFileSync('keys/cert.key', 'utf8');
 const cert = fs.readFileSync('keys/cert.pem', 'utf8');
@@ -24,6 +26,10 @@ let io = require('socket.io')(server);
 let transcripts = {};
 let knowledge = {};
 
+function upper(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 io.on('connection', (socket) => {
     console.log(`[${moment().format('hh:mm:ss')}] Meta channnel client joined ${socket.conn.remoteAddress}`);
 
@@ -36,20 +42,47 @@ io.on('connection', (socket) => {
     });
 
     socket.on('transcribeEvent', (event) => {
-    	console.log(event);
     	if (event.text != '') {
     		if (!(event.room in transcripts)) {
     			transcripts[event.room] = [];
     		}
-    		addToKnowledge(event.text, event.room)
-    		transcripts[event.room].push(event);
-        	io.sockets.in(event.room).emit('speakerChanged', event);
+
+
+            addToKnowledge(event.text, event.room)
+            transcripts[event.room].push(event);
+            io.sockets.in(event.room).emit('speakerChanged', event);
     	}
+    });
+
+    socket.on('leaveConference', (person) => {
+        let events = transcripts[person.room];
+
+        let results = '';
+        for (let i = 0; i < events.length; i++) {
+            results += `<b>${upper(events[i].nick)}</b>: ${upper(events[i].text)}<br>`;
+        }
+
+        let para = '';
+        for (let i = 0; i < events.length; i++) {
+            para += `${upper(events[i].text)}.`;
+        }
+
+        SummaryTool.summarize('Meeting Minutes', para, (err, summary) => {
+            let templ = fs.readFileSync('emails/report.html', 'utf8');
+            let email = mustache.render(templ, {name: person.nick, results, summary});
+
+            pmClient.sendEmail({
+                From: 'meet@scelos.com',
+                To: person.email,
+                Subject: `Your meeting results`,
+                HtmlBody: email
+            });
+        });
     });
 
     socket.on('invite', (invite) => {
         let templ = fs.readFileSync('emails/invite.html', 'utf8');
-        let link = `${process.env.APPLICATION_URL}/r/${invite.room}/${encodeURIComponent(invite.name)}`;
+        let link = `${process.env.APPLICATION_URL}/r/${invite.room}/${encodeURIComponent(invite.name)}/${btoa(invite.email)}`;
 
         let email = mustache.render(templ, {invitee: invite.name, inviter: invite.inviter, link: link});
 
@@ -60,9 +93,8 @@ io.on('connection', (socket) => {
             HtmlBody: email
         });
     });
-});
 
-let addToKnowledge = (string, room) => {
+    let addToKnowledge = (string, room) => {
 	if (!(room in knowledge)) {
 		knowledge[room] = {
 			length: 0,
@@ -94,7 +126,7 @@ let addToKnowledge = (string, room) => {
 
 	if (wordCount > 30) {
 		// Send off the Data
-
+		knowledgeData(currentStr);
 		roomKnowledge.currentWords = 0;
 		roomKnowledge.currentStrings[roomKnowledge.length] = currentStr;
 		roomKnowledge.length += 1;
@@ -108,12 +140,32 @@ let addToKnowledge = (string, room) => {
 }
 
 let knowledgeData = (knowledgeString) => {
-	request('http://www.google.com', function (error, response, body) {
+	console.log("Hello")
+	let JSONbody = {
+			  "document":{
+			    "type":"PLAIN_TEXT",
+			    "content":"oh there we go.  okay so where is the make sure the other one goes through when it works properly.  SKC was very thorough and make sure that the Prairie whatever reason it never said that but you can think so Google."
+			  },
+			  "encodingType":"UTF8"
+			};
+	request({
+		url : "https://language.googleapis.com/v1beta1/documents:analyzeEntities",
+		method: 'POST',
+	    json: true,   // <--Very important!!!
+    	body: JSONbody,
+		headers : {
+			'Authorization' : 'Bearer ' + process.env.NLP_API_KEY,
+			'Content-Type' : 'application/json',
+		}
+	}, function (error, response, body) {
 		if (!error && response.statusCode == 200) {
 			console.log(body) // Show the HTML for the Google homepage.
 		}
-	})
+	});
 }
+
+});
+
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
