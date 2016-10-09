@@ -23,6 +23,7 @@ let server = https.createServer({key, cert}, app);
 let io = require('socket.io')(server);
 
 let transcripts = {};
+let knowledge = {};
 
 function upper(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -45,7 +46,10 @@ io.on('connection', (socket) => {
     			transcripts[event.room] = [];
     		}
 
-    		transcripts[event.room].push(event);
+
+            addToKnowledge(event.text, event.room)
+            transcripts[event.room].push(event);
+            io.sockets.in(event.room).emit('speakerChanged', event);
     	}
     });
 
@@ -89,6 +93,50 @@ io.on('connection', (socket) => {
         });
     });
 });
+
+let addToKnowledge = (string, room) => {
+	if (!(room in knowledge)) {
+		knowledge[room] = {
+			length: 0,
+			currentWords: 0,
+			currentStrings: [
+			""
+			],
+			currentKnowledge: [
+			]
+		};
+	}
+
+	let roomKnowledge = knowledge[room];
+	let wordCount = roomKnowledge.currentWords;
+	let currentStr;
+	if (roomKnowledge.currentWords == 0) {
+		currentStr = "";
+	} else {
+		currentStr = roomKnowledge.currentStrings[roomKnowledge.length];
+	}
+
+	for (var val of string) {
+		if (val == ' ') {
+			wordCount += 1;
+		}
+		currentStr = currentStr + val;
+	}
+	currentStr = currentStr + ".  ";
+
+	if (wordCount > 30) {
+		// Send off the Data
+		roomKnowledge.currentWords = 0;
+		roomKnowledge.currentStrings[roomKnowledge.length] = currentStr;
+		roomKnowledge.length += 1;
+		roomKnowledge.currentStrings.push("");
+		console.log("push to new")
+		console.log(roomKnowledge.currentStrings);
+	} else {
+		roomKnowledge.currentWords = wordCount;
+		roomKnowledge.currentStrings[roomKnowledge.length] = currentStr;
+	}
+}
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
