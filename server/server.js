@@ -21,6 +21,7 @@ let server = https.createServer({key, cert}, app);
 let io = require('socket.io')(server);
 
 let transcripts = {};
+let knowledge = {};
 
 io.on('connection', (socket) => {
     console.log(`[${moment().format('hh:mm:ss')}] Meta channnel client joined ${socket.conn.remoteAddress}`);
@@ -30,7 +31,6 @@ io.on('connection', (socket) => {
     });
 
     socket.on('speechEvent', (event) => {
-    	console.log(event);
         io.sockets.in(event.room).emit('speakerChanged', event);
     });
 
@@ -40,11 +40,12 @@ io.on('connection', (socket) => {
     		if (!(event.room in transcripts)) {
     			transcripts[event.room] = [];
     		}
+    		addToKnowledge(event.text, event.room)
     		transcripts[event.room].push(event);
-    		console.log(transcripts[event.room]);
         	io.sockets.in(event.room).emit('speakerChanged', event);
     	}
-    	
+    });
+
     socket.on('invite', (invite) => {
         let templ = fs.readFileSync('emails/invite.html', 'utf8');
         let link = `${process.env.APPLICATION_URL}/r/${invite.room}/${encodeURIComponent(invite.name)}`;
@@ -59,6 +60,50 @@ io.on('connection', (socket) => {
         });
     });
 });
+
+let addToKnowledge = (string, room) => {
+	if (!(room in knowledge)) {
+		knowledge[room] = {
+			length: 0,
+			currentWords: 0,
+			currentStrings: [
+			""
+			],
+			currentKnowledge: [
+			]
+		};
+	}
+
+	let roomKnowledge = knowledge[room];
+	let wordCount = roomKnowledge.currentWords;
+	let currentStr;
+	if (roomKnowledge.currentWords == 0) {
+		currentStr = "";
+	} else {
+		currentStr = roomKnowledge.currentStrings[roomKnowledge.length];
+	}
+
+	for (var val of string) {
+		if (val == ' ') {
+			wordCount += 1;
+		}
+		currentStr = currentStr + val;
+	}
+	currentStr = currentStr + ".  ";
+
+	if (wordCount > 30) {
+		// Send off the Data
+		roomKnowledge.currentWords = 0;
+		roomKnowledge.currentStrings[roomKnowledge.length] = currentStr;
+		roomKnowledge.length += 1;
+		roomKnowledge.currentStrings.push("");
+		console.log("push to new")
+		console.log(roomKnowledge.currentStrings);
+	} else {
+		roomKnowledge.currentWords = wordCount;
+		roomKnowledge.currentStrings[roomKnowledge.length] = currentStr;
+	}
+}
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
