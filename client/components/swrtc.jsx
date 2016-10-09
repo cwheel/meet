@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import hark from 'hark';
 import attachmediastream from 'attachmediastream';
+import SpeechToText from './speechToText';
 
 import { connect as connectMeta, speechEvent } from '../actions/metaChannel';
 import { conferenceStarted } from '../actions/conference';
@@ -18,7 +19,6 @@ function mapStateToProps(state) {
 class SwRTC extends React.Component {
     constructor(props) {
         super(props);
-
         this.dispatch = this.props.dispatch;
         this.curSpeaker = '';
 
@@ -112,6 +112,8 @@ class SwRTC extends React.Component {
 
         // Watch the stream for speaking stop/start events
         window.swrtcCall.on('localStream', (stream) => {
+
+
             var speechEvents = hark(stream, {});
 
             speechEvents.on('speaking', () => {
@@ -135,6 +137,8 @@ class SwRTC extends React.Component {
                     </div>
                 </div>
 
+                <SpeechToText />
+                <div id='remoteVideos'></div>
                 {!this.props.conferenceStarted ? <div className='waitingMessage'>Hang tight, we're waiting for others to join.</div> : null}
             </div>
 		);

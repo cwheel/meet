@@ -27,6 +27,10 @@ io.on('connection', (socket) => {
     socket.on('speechEvent', (event) => {
         io.sockets.in(event.room).emit('speakerChanged', event);
     });
+
+    socket.on('invite', (invite) => {
+        console.log(invite);
+    });
 });
 
 app.use(bodyParser.json());

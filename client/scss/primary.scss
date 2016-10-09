@@ -1,5 +1,8 @@
 body {
     margin: 0;
+
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
 }
 
 #app {
@@ -73,4 +76,22 @@ body {
     &:hover {
         background: darken(#009bea, 15);
     }
+
+    text-align: center;
+}
+
+.dialogTitle {
+    font-size: 20px;
+    margin-top: -5px;
+    margin-bottom: 20px;
+}
+
+.dialogInput {
+    font-size: 16px;
+    width: 90%;
+    padding: 9px;
+    margin: 10px 0px;
+    outline: none;
+    border: solid 1px #009bea;
+    border-radius: 3px;
 }
