@@ -8,7 +8,7 @@ import {ModalContainer, ModalDialog} from 'react-modal-dialog';
 
 import { vidCapture, micCapture } from '../actions/camera';
 import { showSidebar, showInvite, inviteEmail, inviteName } from '../actions/conference';
-import { invite } from '../actions/metaChannel';
+import { invite, leaveConference } from '../actions/metaChannel';
 
 import Sidebar from './sidebar';
 
@@ -110,6 +110,7 @@ class Conference extends React.Component {
 
     leave() {
         this.dispatch(push('/'));
+        this.dispatch(leaveConference(this.props.params.nick, atob(this.props.params.email), this.props.params.room));
     }
 }
 

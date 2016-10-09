@@ -3,11 +3,12 @@ import { connect } from 'react-redux';
 
 import { push } from 'react-router-redux';
 import randomstring from 'randomstring';
-import { newConferenceName } from '../actions/conference';
+import { newConferenceName, newConferenceEmail } from '../actions/conference';
 
 function mapStateToProps(state) {
     return {
-        newConferenceName: state.conference.get('newConferenceName')
+        newConferenceName: state.conference.get('newConferenceName'),
+        newConferenceEmail: state.conference.get('newConferenceEmail')
     };
 }
 
@@ -17,7 +18,8 @@ class NewConference extends React.Component {
 
         this.dispatch = this.props.dispatch;
         this.start = this.start.bind(this);
-        this.onChange = this.onChange.bind(this);
+        this.onChangeName = this.onChangeName.bind(this);
+        this.onChangeEmail = this.onChangeEmail.bind(this);
         this.enterKey = this.enterKey.bind(this);
     }
 
@@ -28,8 +30,12 @@ class NewConference extends React.Component {
         }
     }
 
-    onChange(e) {
+    onChangeName(e) {
         this.dispatch(newConferenceName(e.target.value));
+    }
+
+    onChangeEmail(e) {
+        this.dispatch(newConferenceEmail(e.target.value));
     }
 
     enterKey(e) {
@@ -42,14 +48,16 @@ class NewConference extends React.Component {
                 <div className='appTitle'>meet</div>
                 <div className='appSubTitle'>intelligent video conferencing</div>
 
-                <input type='text' className='nameInput' onChange={ this.onChange } placeholder='Your Name' onKeyDown={ this.enterKey }/>
+                <input type='text' className='nameInput' onChange={ this.onChangeName } placeholder='Your Name'/>
+                <input type='text' className='nameInput' onChange={ this.onChangeEmail } placeholder='Your Email' style={{marginTop: '10px'}} onKeyDown={ this.enterKey }/>
+
                 <div className='startButton' onClick={ this.start }>Start Talking</div>
             </div>
 		);
     }
 
     start() {
-        this.dispatch(push(`/r/${randomstring.generate(10)}/${encodeURIComponent(this.props.newConferenceName)}`));
+        this.dispatch(push(`/r/${randomstring.generate(10)}/${encodeURIComponent(this.props.newConferenceName)}/${btoa(this.props.newConferenceEmail)}`));
     }
 }
 

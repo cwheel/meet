@@ -1,8 +1,8 @@
 import Immutable from 'immutable';
-import { SHOW_SIDEBAR, SELECT_SIDEBAR_COMPONENT, CONFERENCE_STARTED, NEW_CONFERENCE_NAME, SHOW_INVITE, INVITE_EMAIL, INVITE_NAME } from '../actions/actionTypes';
+import { SHOW_SIDEBAR, SELECT_SIDEBAR_COMPONENT, CONFERENCE_STARTED, NEW_CONFERENCE_NAME, SHOW_INVITE, INVITE_EMAIL, INVITE_NAME, NEW_CONFERENCE_EMAIL } from '../actions/actionTypes';
 
 export default (state = Immutable.Map({ sidebarVisible: false , sidebarComponent: 'participants', conferenceStarted: false, newConferenceName: '', showInvite: false,
-                                        inviteEmail: '', inviteName: '' }), action) => {
+                                        inviteEmail: '', inviteName: '', newConferenceEmail: '' }), action) => {
     switch(action.type) {
         case SHOW_SIDEBAR:
             return state.set('sidebarVisible', action.visible);
@@ -18,6 +18,8 @@ export default (state = Immutable.Map({ sidebarVisible: false , sidebarComponent
             return state.set('inviteName', action.name);
         case INVITE_EMAIL:
             return state.set('inviteEmail', action.email);
+        case NEW_CONFERENCE_EMAIL:
+            return state.set('newConferenceEmail', action.email);
         default:
             return state;
     }

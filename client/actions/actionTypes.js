@@ -11,7 +11,10 @@ export const SELECT_SIDEBAR_COMPONENT = 'selectSidebarComponent';
 
 export const CONFERENCE_STARTED = 'conferenceStarted';
 export const NEW_CONFERENCE_NAME = 'newConferenceName';
+export const NEW_CONFERENCE_EMAIL = 'newConferenceEmail';
 
 export const SHOW_INVITE = 'showInvite';
 export const INVITE_EMAIL = 'inviteEmail';
 export const INVITE_NAME = 'inviteName';
+
+export const LEAVE_CONFERENCE = 'leaveConference';

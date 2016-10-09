@@ -1,4 +1,4 @@
-import { SHOW_SIDEBAR, SELECT_SIDEBAR_COMPONENT, CONFERENCE_STARTED, NEW_CONFERENCE_NAME, SHOW_INVITE, INVITE_NAME, INVITE_EMAIL } from './actionTypes';
+import { SHOW_SIDEBAR, SELECT_SIDEBAR_COMPONENT, CONFERENCE_STARTED, NEW_CONFERENCE_NAME, SHOW_INVITE, INVITE_NAME, INVITE_EMAIL, NEW_CONFERENCE_EMAIL } from './actionTypes';
 
 export function showSidebar(visible) {
     return {
@@ -24,6 +24,13 @@ export function newConferenceName(name) {
     return {
         type: NEW_CONFERENCE_NAME,
         name
+    }
+}
+
+export function newConferenceEmail(email) {
+    return {
+        type: NEW_CONFERENCE_EMAIL,
+        email
     }
 }
 
